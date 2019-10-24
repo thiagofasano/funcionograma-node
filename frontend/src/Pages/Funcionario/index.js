@@ -4,7 +4,8 @@ import { Table, Row, Col, Form, Button } from 'react-bootstrap';
 import { MdDelete, MdModeEdit } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import api from '../../services/api';
-import confirmService from '../../confirmService/Confirm';
+import confirmService from '../../Components/confirmService/Confirm';
+import Menu from '../../Components/Menu';
 
 function Funcionario() {
   const [funcionarios, setFuncionarios] = useState([]);
@@ -69,103 +70,108 @@ function Funcionario() {
   }
 
   return (
-    <div className="container">
-      <h3>Funcionários</h3>
+    <>
+      <Menu />
+      <div className="container">
+        <h3>Funcionários</h3>
 
-      <Form.Group as={Row}>
-        <Form.Label column sm="2">
-          Departamento:
-        </Form.Label>
-        <Col sm="10">
-          <Form.Control
-            as="select"
-            type="text"
-            name="departamento"
-            onChange={e => handleSelectDepartamento(e)}
-          >
-            <option value="selecione">Selecione</option>
-            {departamentosList}
-          </Form.Control>
-        </Col>
-      </Form.Group>
+        <Form.Group as={Row}>
+          <Form.Label column sm="2">
+            Departamento:
+          </Form.Label>
+          <Col sm="10">
+            <Form.Control
+              as="select"
+              type="text"
+              name="departamento"
+              onChange={e => handleSelectDepartamento(e)}
+            >
+              <option value="selecione">Selecione</option>
+              {departamentosList}
+            </Form.Control>
+          </Col>
+        </Form.Group>
 
-      {funcionarios.length <= 0 ? (
-        ''
-      ) : (
-        <div>
-          <Form.Control
-            placeholder="Pesquisar por nome.."
-            type="text"
-            onChange={e => search(e)}
-          />
-          <br />
-        </div>
-      )}
+        {funcionarios.length <= 0 ? (
+          ''
+        ) : (
+          <div>
+            <Form.Control
+              placeholder="Pesquisar por nome.."
+              type="text"
+              onChange={e => search(e)}
+            />
+            <br />
+          </div>
+        )}
 
-      <Table striped bordered>
-        <thead>
-          <tr>
-            <th>Foto</th>
-            <th>Nome</th>
-            <th>Departamento</th>
-            <th>Núcleo</th>
-            <th>Equipe</th>
-            <th>Cargo</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {funcionarios.map(funcionario => (
-            <tr key={funcionario.id}>
-              <td>
-                {funcionario.image ? (
-                  <img
-                    src={`http://localhost:3333/files/${funcionario.image.path}`}
-                    alt=""
-                    width="61px"
-                    className="profile"
-                  />
-                ) : (
-                  <img src="" alt="" width="61px" className="profile" />
-                )}
-              </td>
-              <td>{funcionario.nome}</td>
-              <td>
-                {funcionario.departamento ? funcionario.departamento.nome : ''}
-              </td>
-              <td>{funcionario.nucleo ? funcionario.nucleo.nome : ''}</td>
-              <td>{funcionario.equipe ? funcionario.equipe.nome : ''}</td>
-              <td>{funcionario.cargo ? funcionario.cargo.nome : ''}</td>
-              <td>
-                <Link
-                  to={{
-                    pathname: `/funcionarios/${funcionario.id}`,
-                    data: funcionario,
-                  }}
-                >
-                  <MdModeEdit size="16px" id={funcionario.id} />
-                </Link>
-
-                <Link to="#" size="sm">
-                  <MdDelete
-                    onClick={() =>
-                      handleDelete(funcionario.id, funcionario.nome)
-                    }
-                    size="16px"
-                  />
-                </Link>
-              </td>
+        <Table striped bordered>
+          <thead>
+            <tr>
+              <th>Foto</th>
+              <th>Nome</th>
+              <th>Departamento</th>
+              <th>Núcleo</th>
+              <th>Equipe</th>
+              <th>Cargo</th>
+              <th>Ações</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {funcionarios.map(funcionario => (
+              <tr key={funcionario.id}>
+                <td>
+                  {funcionario.image ? (
+                    <img
+                      src={`http://localhost:3333/files/${funcionario.image.path}`}
+                      alt=""
+                      width="61px"
+                      className="profile"
+                    />
+                  ) : (
+                    <img src="" alt="" width="61px" className="profile" />
+                  )}
+                </td>
+                <td>{funcionario.nome}</td>
+                <td>
+                  {funcionario.departamento
+                    ? funcionario.departamento.nome
+                    : ''}
+                </td>
+                <td>{funcionario.nucleo ? funcionario.nucleo.nome : ''}</td>
+                <td>{funcionario.equipe ? funcionario.equipe.nome : ''}</td>
+                <td>{funcionario.cargo ? funcionario.cargo.nome : ''}</td>
+                <td>
+                  <Link
+                    to={{
+                      pathname: `/funcionarios/${funcionario.id}`,
+                      data: funcionario,
+                    }}
+                  >
+                    <MdModeEdit size="16px" id={funcionario.id} />
+                  </Link>
 
-      <p>{notFound}</p>
+                  <Link to="#" size="sm">
+                    <MdDelete
+                      onClick={() =>
+                        handleDelete(funcionario.id, funcionario.nome)
+                      }
+                      size="16px"
+                    />
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
 
-      <Button href="novo" variant="success" size="sm">
-        Novo
-      </Button>
-    </div>
+        <p>{notFound}</p>
+
+        <Button href="novo" variant="success" size="sm">
+          Novo
+        </Button>
+      </div>
+    </>
   );
 }
 

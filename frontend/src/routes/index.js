@@ -1,9 +1,8 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route, BrowserRouter } from 'react-router-dom';
 
 import Main from '../Pages/Main';
-import Menu from '../Components/Menu';
-import NoExist from '../Pages/NoExist';
+// import NoExist from '../Pages/NoExist';
 
 // Departamento
 import Departamento from '../Pages/Departamento';
@@ -36,7 +35,6 @@ import Funcionograma from '../Pages/Funcionograma';
 export default function Routes() {
   return (
     <BrowserRouter>
-      <Menu />
       <Switch>
         <Route path="/" exact component={Main} />
         <Route path="/departamentos/" exact component={Departamento} />
@@ -59,8 +57,8 @@ export default function Routes() {
           exact
           component={Funcionograma}
         />
-        <Route path="/404" component={NoExist} />
-        <Redirect from="*" to="/404" component={NoExist} />
+        {/* <Route path="/404" component={NoExist} />
+        <Redirect from="*" to="/404" component={NoExist} /> */}
       </Switch>
     </BrowserRouter>
   );

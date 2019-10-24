@@ -1,17 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import api from '../../services/api';
 
-function Funcionograma({ match }) {
+function Funcionograma(props) {
   const [funcionarios, setFuncionarios] = useState([]);
   const [nucleos, setNucleos] = useState([]);
   const [equipes, setEquipes] = useState([]);
 
-  const { departamento } = match.params;
+  const { departamento } = props.match.params;
 
   useEffect(() => {
     async function loadNucleos() {
       const response = await api.get(`/nucleos?departamento=${departamento}`);
       setNucleos(response.data);
+
+      const { dispatch } = props;
+
+      dispatch({
+        type: 'MENU_VIEW',
+        visitante: true,
+      });
     }
 
     async function loadEquipes() {
@@ -93,4 +101,7 @@ function Funcionograma({ match }) {
     </div>
   );
 }
-export default Funcionograma;
+
+export default connect(state => ({
+  user: state.user,
+}))(Funcionograma);

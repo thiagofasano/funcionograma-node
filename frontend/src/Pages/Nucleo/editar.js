@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { Form, Button, Col } from 'react-bootstrap';
 import api from '../../services/api';
+import Menu from '../../Components/Menu';
 
 function NucleoEditar({ match }) {
   const [nome, setNome] = useState('');
@@ -45,53 +46,56 @@ function NucleoEditar({ match }) {
   ));
 
   return (
-    <div className="container">
-      <h3>Editar Núcleo</h3>
+    <>
+      <Menu />
+      <div className="container">
+        <h3>Editar Núcleo</h3>
 
-      <Form onSubmit={handleSubmit}>
-        <>
-          <Form.Row>
-            <Form.Group as={Col}>
-              <Form.Label>Nome</Form.Label>
+        <Form onSubmit={handleSubmit}>
+          <>
+            <Form.Row>
+              <Form.Group as={Col}>
+                <Form.Label>Nome</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="nome"
+                  onChange={e => setNome(e.target.value)}
+                  defaultValue={nome}
+                />
+              </Form.Group>
+
+              <Form.Group as={Col}>
+                <Form.Label>Departamento</Form.Label>
+                <Form.Control
+                  as="select"
+                  type="text"
+                  name="depatamento"
+                  value={departamento}
+                  onChange={e => setDepartamento(e.target.value)}
+                >
+                  {departamentosList}
+                </Form.Control>
+              </Form.Group>
+            </Form.Row>
+
+            <Form.Group>
+              <Form.Label>Atividades</Form.Label>
               <Form.Control
-                type="text"
-                name="nome"
-                onChange={e => setNome(e.target.value)}
-                defaultValue={nome}
+                as="textarea"
+                rows="3"
+                name="atividades"
+                value={atividades}
+                onChange={e => setAtividades(e.target.value)}
               />
             </Form.Group>
+          </>
 
-            <Form.Group as={Col}>
-              <Form.Label>Departamento</Form.Label>
-              <Form.Control
-                as="select"
-                type="text"
-                name="depatamento"
-                value={departamento}
-                onChange={e => setDepartamento(e.target.value)}
-              >
-                {departamentosList}
-              </Form.Control>
-            </Form.Group>
-          </Form.Row>
-
-          <Form.Group>
-            <Form.Label>Atividades</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows="3"
-              name="atividades"
-              value={atividades}
-              onChange={e => setAtividades(e.target.value)}
-            />
-          </Form.Group>
-        </>
-
-        <Button variant="primary" type="submit" size="sm">
-          Editar
-        </Button>
-      </Form>
-    </div>
+          <Button variant="primary" type="submit" size="sm">
+            Editar
+          </Button>
+        </Form>
+      </div>
+    </>
   );
 }
 

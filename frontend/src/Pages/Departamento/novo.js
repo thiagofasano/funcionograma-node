@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { Form, Button, Col } from 'react-bootstrap';
 import api from '../../services/api';
+import Menu from '../../Components/Menu';
 
 function DepartamentoNovo(props) {
   const [validated, setValidated] = useState(false);
@@ -23,27 +24,30 @@ function DepartamentoNovo(props) {
   }
 
   return (
-    <div className="container">
-      <h3>Novo Departamento</h3>
+    <>
+      <Menu />
+      <div className="container">
+        <h3>Novo Departamento</h3>
 
-      <Form onSubmit={handleSubmit} noValidate validated={validated}>
-        <Form.Row>
-          <Form.Group as={Col}>
-            <Form.Label>Nome</Form.Label>
-            <Form.Control
-              type="text"
-              onChange={e => setNome(e.target.value)}
-              value={nome}
-              required
-            />
-          </Form.Group>
-        </Form.Row>
+        <Form onSubmit={handleSubmit} noValidate validated={validated}>
+          <Form.Row>
+            <Form.Group as={Col}>
+              <Form.Label>Nome</Form.Label>
+              <Form.Control
+                type="text"
+                onChange={e => setNome(e.target.value)}
+                value={nome}
+                required
+              />
+            </Form.Group>
+          </Form.Row>
 
-        <Button variant="success" type="submit" size="sm">
-          Enviar
-        </Button>
-      </Form>
-    </div>
+          <Button variant="success" type="submit" size="sm">
+            Enviar
+          </Button>
+        </Form>
+      </div>
+    </>
   );
 }
 

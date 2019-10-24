@@ -4,7 +4,8 @@ import { Table, Button } from 'react-bootstrap';
 import { MdDelete, MdModeEdit } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import api from '../../services/api';
-import confirmService from '../../confirmService/Confirm';
+import confirmService from '../../Components/confirmService/Confirm';
+import Menu from '../../Components/Menu';
 
 function Departamentos() {
   const [departamentos, setDepartamentos] = useState([]);
@@ -34,40 +35,43 @@ function Departamentos() {
   }
 
   return (
-    <div className="container">
-      <h3>Departamentos</h3>
+    <>
+      <Menu />
+      <div className="container">
+        <h3>Departamentos</h3>
 
-      <Table striped bordered>
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {departamentos.map(dep => (
-            <tr key={dep.id}>
-              <td>{dep.nome}</td>
-              <td>
-                <Link to={`/departamentos/${dep.id}`} size="sm">
-                  <MdModeEdit size="16px" id={dep.id} />
-                </Link>
-
-                <Link to="#" size="sm">
-                  <MdDelete
-                    onClick={() => handleDelete(dep.id, dep.nome)}
-                    size="16px"
-                  />
-                </Link>
-              </td>
+        <Table striped bordered>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Ações</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
-      <Button href="novo" variant="success" size="sm">
-        Novo
-      </Button>
-    </div>
+          </thead>
+          <tbody>
+            {departamentos.map(dep => (
+              <tr key={dep.id}>
+                <td>{dep.nome}</td>
+                <td>
+                  <Link to={`/departamentos/${dep.id}`} size="sm">
+                    <MdModeEdit size="16px" id={dep.id} />
+                  </Link>
+
+                  <Link to="#" size="sm">
+                    <MdDelete
+                      onClick={() => handleDelete(dep.id, dep.nome)}
+                      size="16px"
+                    />
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        <Button href="novo" variant="success" size="sm">
+          Novo
+        </Button>
+      </div>
+    </>
   );
 }
 

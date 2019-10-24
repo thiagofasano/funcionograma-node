@@ -4,7 +4,8 @@ import { Form, Table, Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { MdDelete, MdModeEdit } from 'react-icons/md';
 import api from '../../services/api';
-import confirmService from '../../confirmService/Confirm';
+import confirmService from '../../Components/confirmService/Confirm';
+import Menu from '../../Components/Menu';
 
 function Equipe() {
   const [equipes, setEquipes] = useState([]);
@@ -62,81 +63,84 @@ function Equipe() {
   ));
 
   return (
-    <div className="container">
-      <h3>Equipes</h3>
+    <>
+      <Menu />
+      <div className="container">
+        <h3>Equipes</h3>
 
-      <Form.Group as={Row}>
-        <Form.Label column sm="2">
-          Departamento:
-        </Form.Label>
-        <Col sm="10">
-          <Form.Control
-            as="select"
-            type="text"
-            name="departamento"
-            onChange={e => handleSelectDepartamento(e)}
-          >
-            <option value="selecione">Selecione</option>
-            {departamentoList}
-          </Form.Control>
-        </Col>
-      </Form.Group>
+        <Form.Group as={Row}>
+          <Form.Label column sm="2">
+            Departamento:
+          </Form.Label>
+          <Col sm="10">
+            <Form.Control
+              as="select"
+              type="text"
+              name="departamento"
+              onChange={e => handleSelectDepartamento(e)}
+            >
+              <option value="selecione">Selecione</option>
+              {departamentoList}
+            </Form.Control>
+          </Col>
+        </Form.Group>
 
-      <Form.Group as={Row}>
-        <Form.Label column sm="2">
-          Núcleo:
-        </Form.Label>
-        <Col sm="10">
-          <Form.Control
-            as="select"
-            type="text"
-            name="nucleo"
-            onChange={e => handleSelectNucleo(e)}
-          >
-            <option value="selecione">Selecione</option>
-            {nucleoList}
-          </Form.Control>
-        </Col>
-      </Form.Group>
+        <Form.Group as={Row}>
+          <Form.Label column sm="2">
+            Núcleo:
+          </Form.Label>
+          <Col sm="10">
+            <Form.Control
+              as="select"
+              type="text"
+              name="nucleo"
+              onChange={e => handleSelectNucleo(e)}
+            >
+              <option value="selecione">Selecione</option>
+              {nucleoList}
+            </Form.Control>
+          </Col>
+        </Form.Group>
 
-      <Table striped bordered>
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Atividades</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {equipes.map(equipe => (
-            <tr key={equipe.id}>
-              <td>{equipe.nome}</td>
-              <td>{equipe.atividades}</td>
-              <td>
-                <Link
-                  to={{
-                    pathname: `/equipes/${equipe.id}`,
-                    data: equipe,
-                  }}
-                >
-                  <MdModeEdit size="16px" id={equipe.id} />
-                </Link>
-                <Link to="#" size="sm">
-                  <MdDelete
-                    onClick={() => handleDelete(equipe.id, equipe.nome)}
-                    size="16px"
-                  />
-                </Link>
-              </td>
+        <Table striped bordered>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Atividades</th>
+              <th>Ações</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
-      <p>{notFound}</p>
-      <Button href="novo" variant="success" size="sm">
-        Novo
-      </Button>
-    </div>
+          </thead>
+          <tbody>
+            {equipes.map(equipe => (
+              <tr key={equipe.id}>
+                <td>{equipe.nome}</td>
+                <td>{equipe.atividades}</td>
+                <td>
+                  <Link
+                    to={{
+                      pathname: `/equipes/${equipe.id}`,
+                      data: equipe,
+                    }}
+                  >
+                    <MdModeEdit size="16px" id={equipe.id} />
+                  </Link>
+                  <Link to="#" size="sm">
+                    <MdDelete
+                      onClick={() => handleDelete(equipe.id, equipe.nome)}
+                      size="16px"
+                    />
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        <p>{notFound}</p>
+        <Button href="novo" variant="success" size="sm">
+          Novo
+        </Button>
+      </div>
+    </>
   );
 }
 

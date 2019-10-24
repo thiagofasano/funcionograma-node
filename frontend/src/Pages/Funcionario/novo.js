@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { Form, Button, Col } from 'react-bootstrap';
 import api from '../../services/api';
+import Menu from '../../Components/Menu';
 
 function FuncionarioNovo() {
   const [departamentos, setDepartamentos] = useState([]);
@@ -88,82 +89,85 @@ function FuncionarioNovo() {
   ));
 
   return (
-    <div className="container">
-      <h3>Novo Funcionário</h3>
-      <Form onSubmit={handleSubmit}>
-        <Form.Row>
-          <Form.Group as={Col} xs={12} md={12}>
-            <Form.Label>Foto</Form.Label>
-            <Form.Control
-              type="file"
-              name="foto"
-              onChange={e => setImage(e.target.files[0])}
-            />
+    <>
+      <Menu />
+      <div className="container">
+        <h3>Novo Funcionário</h3>
+        <Form onSubmit={handleSubmit}>
+          <Form.Row>
+            <Form.Group as={Col} xs={12} md={12}>
+              <Form.Label>Foto</Form.Label>
+              <Form.Control
+                type="file"
+                name="foto"
+                onChange={e => setImage(e.target.files[0])}
+              />
 
-            <br />
+              <br />
 
-            <Form.Label>Nome</Form.Label>
-            <Form.Control
-              type="text"
-              name="nome"
-              onChange={e => setNome(e.target.value)}
-            />
-            <br />
+              <Form.Label>Nome</Form.Label>
+              <Form.Control
+                type="text"
+                name="nome"
+                onChange={e => setNome(e.target.value)}
+              />
+              <br />
 
-            <Form.Label>Departamento</Form.Label>
+              <Form.Label>Departamento</Form.Label>
 
-            <Form.Control
-              as="select"
-              type="text"
-              name="departamento"
-              value={departamento}
-              onChange={e => handleSelectDepartamento(e.target.value)}
-            >
-              <option value="0">Selecione uma opção</option>
-              {departamentosList}
-            </Form.Control>
-            <br />
-            <Form.Label>Nucleo</Form.Label>
-            <Form.Control
-              as="select"
-              type="text"
-              name="nucleo"
-              value={nucleo}
-              onChange={e => handleSelectNucleo(e.target.value)}
-            >
-              <option value="0">Selecione uma opção</option>
-              {nucleosList}
-            </Form.Control>
-            <br />
-            <Form.Label>Equipe</Form.Label>
-            <Form.Control
-              as="select"
-              type="text"
-              name="equipe"
-              onChange={e => setEquipe(e.target.value)}
-            >
-              <option value="0">Selecione uma opção</option>
-              {equipesList}
-            </Form.Control>
-            <br />
-            <Form.Label>Cargo</Form.Label>
-            <Form.Control
-              as="select"
-              type="text"
-              name="cargo"
-              onChange={e => setCargo(e.target.value)}
-            >
-              <option value="0">Selecione uma opção</option>
-              {cargosList}
-            </Form.Control>
-            <br />
-            <Button variant="success" type="submit" size="sm">
-              Cadastrar
-            </Button>
-          </Form.Group>
-        </Form.Row>
-      </Form>
-    </div>
+              <Form.Control
+                as="select"
+                type="text"
+                name="departamento"
+                value={departamento}
+                onChange={e => handleSelectDepartamento(e.target.value)}
+              >
+                <option value="0">Selecione uma opção</option>
+                {departamentosList}
+              </Form.Control>
+              <br />
+              <Form.Label>Nucleo</Form.Label>
+              <Form.Control
+                as="select"
+                type="text"
+                name="nucleo"
+                value={nucleo}
+                onChange={e => handleSelectNucleo(e.target.value)}
+              >
+                <option value="0">Selecione uma opção</option>
+                {nucleosList}
+              </Form.Control>
+              <br />
+              <Form.Label>Equipe</Form.Label>
+              <Form.Control
+                as="select"
+                type="text"
+                name="equipe"
+                onChange={e => setEquipe(e.target.value)}
+              >
+                <option value="0">Selecione uma opção</option>
+                {equipesList}
+              </Form.Control>
+              <br />
+              <Form.Label>Cargo</Form.Label>
+              <Form.Control
+                as="select"
+                type="text"
+                name="cargo"
+                onChange={e => setCargo(e.target.value)}
+              >
+                <option value="0">Selecione uma opção</option>
+                {cargosList}
+              </Form.Control>
+              <br />
+              <Button variant="success" type="submit" size="sm">
+                Cadastrar
+              </Button>
+            </Form.Group>
+          </Form.Row>
+        </Form>
+      </div>
+    </>
   );
 }
 

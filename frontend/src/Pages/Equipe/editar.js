@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { Form, Button, Col } from 'react-bootstrap';
 import api from '../../services/api';
+import Menu from '../../Components/Menu';
 
 function EquipeDetail({ match }) {
   const [nome, setNome] = useState('');
@@ -67,66 +68,69 @@ function EquipeDetail({ match }) {
   ));
 
   return (
-    <div className="container">
-      <h3>Editar Equipe</h3>
+    <>
+      <Menu />
+      <div className="container">
+        <h3>Editar Equipe</h3>
 
-      <Form onSubmit={handleSubmit}>
-        <>
-          <Form.Row>
-            <Form.Group as={Col}>
-              <Form.Label>Nome</Form.Label>
+        <Form onSubmit={handleSubmit}>
+          <>
+            <Form.Row>
+              <Form.Group as={Col}>
+                <Form.Label>Nome</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="nome"
+                  defaultValue={nome}
+                  onChange={e => setNome(e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group as={Col}>
+                <Form.Label>Departamento</Form.Label>
+                <Form.Control
+                  as="select"
+                  type="text"
+                  name="departamento"
+                  defaultValue={departamento}
+                  onChange={e => handleChangeDepartamento(e.target.value)}
+                >
+                  {departamentosList}
+                </Form.Control>
+              </Form.Group>
+
+              <Form.Group as={Col}>
+                <Form.Label>Núcleo</Form.Label>
+                <Form.Control
+                  as="select"
+                  type="text"
+                  name="nucleo"
+                  value={nucleo}
+                  onChange={e => setNucleo(e.target.value)}
+                >
+                  {nucleosList}
+                </Form.Control>
+              </Form.Group>
+            </Form.Row>
+
+            <Form.Group>
+              <Form.Label>Atividades</Form.Label>
               <Form.Control
-                type="text"
-                name="nome"
-                defaultValue={nome}
-                onChange={e => setNome(e.target.value)}
+                as="textarea"
+                rows="3"
+                name="atividades"
+                value={atividades}
+                onChange={e => setAtividades(e.target.value)}
               />
             </Form.Group>
+          </>
 
-            <Form.Group as={Col}>
-              <Form.Label>Departamento</Form.Label>
-              <Form.Control
-                as="select"
-                type="text"
-                name="departamento"
-                defaultValue={departamento}
-                onChange={e => handleChangeDepartamento(e.target.value)}
-              >
-                {departamentosList}
-              </Form.Control>
-            </Form.Group>
-
-            <Form.Group as={Col}>
-              <Form.Label>Núcleo</Form.Label>
-              <Form.Control
-                as="select"
-                type="text"
-                name="nucleo"
-                value={nucleo}
-                onChange={e => setNucleo(e.target.value)}
-              >
-                {nucleosList}
-              </Form.Control>
-            </Form.Group>
-          </Form.Row>
-
-          <Form.Group>
-            <Form.Label>Atividades</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows="3"
-              name="atividades"
-              value={atividades}
-              onChange={e => setAtividades(e.target.value)}
-            />
-          </Form.Group>
-        </>
-
-        <Button variant="primary" type="submit" size="sm">
-          Enviar
-        </Button>
-      </Form>
-    </div>
+          <Button variant="primary" type="submit" size="sm">
+            Enviar
+          </Button>
+        </Form>
+      </div>
+    </>
   );
 }
 

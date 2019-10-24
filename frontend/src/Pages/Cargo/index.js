@@ -6,7 +6,8 @@ import { MdDelete, MdModeEdit } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import sortable from 'html5sortable/dist/html5sortable.es';
 import api from '../../services/api';
-import confirmService from '../../confirmService/Confirm';
+import confirmService from '../../Components/confirmService/Confirm';
+import Menu from '../../Components/Menu';
 
 function Cargos() {
   const [cargos, setCargos] = useState([]);
@@ -64,43 +65,46 @@ function Cargos() {
   // }
 
   return (
-    <div className="container">
-      <h3>Cargos</h3>
-      <Alert variant="primary">
-        Arraste os cargos da lista para alterar a ordem de importância.
-      </Alert>
+    <>
+      <Menu />
+      <div className="container">
+        <h3>Cargos</h3>
+        <Alert variant="primary">
+          Arraste os cargos da lista para alterar a ordem de importância.
+        </Alert>
 
-      <Table striped bordered className="cargos">
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody className="js-sortable">
-          {cargos.map(cargo => (
-            <tr id={cargo.id} key={cargo.id} draggable="true">
-              <td>{cargo.nome}</td>
-              <td>
-                <Link to={`/cargos/${cargo.id}`} size="sm">
-                  <MdModeEdit size="16px" id={cargo.id} />
-                </Link>
-
-                <Link to="#" size="sm">
-                  <MdDelete
-                    onClick={() => handleDelete(cargo.id, cargo.nome)}
-                    size="16px"
-                  />
-                </Link>
-              </td>
+        <Table striped bordered className="cargos">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Ações</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
-      <Button href="novo" variant="success" size="sm">
-        Novo
-      </Button>
-    </div>
+          </thead>
+          <tbody className="js-sortable">
+            {cargos.map(cargo => (
+              <tr id={cargo.id} key={cargo.id} draggable="true">
+                <td>{cargo.nome}</td>
+                <td>
+                  <Link to={`/cargos/${cargo.id}`} size="sm">
+                    <MdModeEdit size="16px" id={cargo.id} />
+                  </Link>
+
+                  <Link to="#" size="sm">
+                    <MdDelete
+                      onClick={() => handleDelete(cargo.id, cargo.nome)}
+                      size="16px"
+                    />
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        <Button href="novo" variant="success" size="sm">
+          Novo
+        </Button>
+      </div>
+    </>
   );
 }
 

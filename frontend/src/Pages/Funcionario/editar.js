@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { Form, Button, Col } from 'react-bootstrap';
 import api from '../../services/api';
+import Menu from '../../Components/Menu';
 
 function FuncionarioEditar({ match }) {
   // Listas
@@ -110,91 +111,94 @@ function FuncionarioEditar({ match }) {
   ));
 
   return (
-    <div className="container">
-      <h3>Editar Funcionário</h3>
-      {funcionarios.map(funcionario => (
-        <Form onSubmit={handleSubmit}>
-          <Form.Row>
-            <Form.Group as={Col}>
-              {funcionario.image ? (
-                <img
-                  src={`http://localhost:3333/files/${funcionario.image.path}`}
-                  alt=""
-                  width="150px"
-                  className="profile"
+    <>
+      <Menu />
+      <div className="container">
+        <h3>Editar Funcionário</h3>
+        {funcionarios.map(funcionario => (
+          <Form onSubmit={handleSubmit}>
+            <Form.Row>
+              <Form.Group as={Col}>
+                {funcionario.image ? (
+                  <img
+                    src={`http://localhost:3333/files/${funcionario.image.path}`}
+                    alt=""
+                    width="150px"
+                    className="profile"
+                  />
+                ) : (
+                  <img src="" alt="" width="61px" className="profile" />
+                )}
+              </Form.Group>
+
+              <Form.Group as={Col} xs={12} md={9}>
+                <Form.Label>Nome</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="nome"
+                  defaultValue={funcionario.nome}
+                  onChange={e => setNome(e.target.value)}
                 />
-              ) : (
-                <img src="" alt="" width="61px" className="profile" />
-              )}
-            </Form.Group>
+                <br />
+                <Form.Label>Departamento</Form.Label>
 
-            <Form.Group as={Col} xs={12} md={9}>
-              <Form.Label>Nome</Form.Label>
-              <Form.Control
-                type="text"
-                name="nome"
-                defaultValue={funcionario.nome}
-                onChange={e => setNome(e.target.value)}
-              />
-              <br />
-              <Form.Label>Departamento</Form.Label>
-
-              <Form.Control
-                as="select"
-                type="text"
-                name="departamento"
-                value={departamento}
-                onChange={e => handleSelectDepartamento(e.target.value)}
-              >
-                <option value="0">Selecione uma opção</option>
-                {departamentosList}
-              </Form.Control>
-              <br />
-              <Form.Label>Núcleo</Form.Label>
-              <Form.Control
-                as="select"
-                type="text"
-                name="nucleo"
-                value={nucleo}
-                onChange={e => handleSelectNucleo(e.target.value)}
-              >
-                <option value="0">Selecione uma opção</option>
-                {nucleosList}
-              </Form.Control>
-              <br />
-              <Form.Label>Equipe</Form.Label>
-              <Form.Control
-                as="select"
-                type="text"
-                name="equipe"
-                value={equipe}
-                onChange={e => setEquipe(e.target.value)}
-              >
-                {}
-                <option value="0">Selecione uma opção</option>
-                {equipesList}
-              </Form.Control>
-              <br />
-              <Form.Label>Cargo</Form.Label>
-              <Form.Control
-                as="select"
-                type="text"
-                name="cargo"
-                value={cargo}
-                onChange={e => setCargo(e.target.value)}
-              >
-                <option value="0">Selecione uma opção</option>
-                {cargosList}
-              </Form.Control>
-              <br />
-              <Button variant="primary" type="submit" size="sm">
-                Editar
-              </Button>
-            </Form.Group>
-          </Form.Row>
-        </Form>
-      ))}
-    </div>
+                <Form.Control
+                  as="select"
+                  type="text"
+                  name="departamento"
+                  value={departamento}
+                  onChange={e => handleSelectDepartamento(e.target.value)}
+                >
+                  <option value="0">Selecione uma opção</option>
+                  {departamentosList}
+                </Form.Control>
+                <br />
+                <Form.Label>Núcleo</Form.Label>
+                <Form.Control
+                  as="select"
+                  type="text"
+                  name="nucleo"
+                  value={nucleo}
+                  onChange={e => handleSelectNucleo(e.target.value)}
+                >
+                  <option value="0">Selecione uma opção</option>
+                  {nucleosList}
+                </Form.Control>
+                <br />
+                <Form.Label>Equipe</Form.Label>
+                <Form.Control
+                  as="select"
+                  type="text"
+                  name="equipe"
+                  value={equipe}
+                  onChange={e => setEquipe(e.target.value)}
+                >
+                  {}
+                  <option value="0">Selecione uma opção</option>
+                  {equipesList}
+                </Form.Control>
+                <br />
+                <Form.Label>Cargo</Form.Label>
+                <Form.Control
+                  as="select"
+                  type="text"
+                  name="cargo"
+                  value={cargo}
+                  onChange={e => setCargo(e.target.value)}
+                >
+                  <option value="0">Selecione uma opção</option>
+                  {cargosList}
+                </Form.Control>
+                <br />
+                <Button variant="primary" type="submit" size="sm">
+                  Editar
+                </Button>
+              </Form.Group>
+            </Form.Row>
+          </Form>
+        ))}
+      </div>
+    </>
   );
 }
 
