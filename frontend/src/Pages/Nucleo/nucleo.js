@@ -4,39 +4,64 @@ import { Form, Button, Col } from 'react-bootstrap';
 import api from '../../services/api';
 import Menu from '../../Components/Menu';
 
-function NucleoEditar({ match }) {
+// import { Container } from './styles';
+
+const Nucleo = ({ match }) => {
+  const [validated, setValidated] = useState(false);
   const [nome, setNome] = useState('');
   const [atividades, setAtividades] = useState('');
-  const [departamento, setDepartamento] = useState('');
+  const [departamento, setDepartamento] = useState([]);
   const [departamentos, setDepartamentos] = useState([]);
 
   const { id } = match.params;
 
+  async function loadDeps() {
+    const response = await api.get(`/departamentos/`);
+    setDepartamentos(response.data);
+  }
+
+  async function loadNucleo() {
+    const response = await api.get(`/nucleos/${id}`);
+    setNome(response.data.nome);
+    setAtividades(response.data.atividades);
+    setDepartamento(response.data.departamento.id);
+  }
+
   useEffect(() => {
-    async function loadNucleos() {
-      const response = await api.get(`/nucleos/${id}`);
-      setAtividades(response.data.atividades);
-      setNome(response.data.nome);
-      setDepartamento(response.data.departamento_id);
-    }
-
-    async function loadDepartamentos() {
-      const response = await api.get('/departamentos');
-      setDepartamentos(response.data);
-    }
-
-    loadNucleos();
-    loadDepartamentos();
+    loadDeps();
+    id && loadNucleo();
   }, []);
 
-  async function handleSubmit(e) {
+  async function handleSubmitEditar(e) {
     e.preventDefault();
+
+    const form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      e.preventDefault();
+      return setValidated(true);
+    }
     await api.put(`/nucleos/${id}`, {
       nome,
       atividades,
       departamento_id: departamento,
     });
     return toast.success(`Cadastrado com sucesso!`);
+  }
+
+  async function handleSubmitNovo(e) {
+    e.preventDefault();
+
+    const form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      setValidated(true);
+    }
+    await api.post(`/nucleos/`, {
+      nome,
+      atividades,
+      departamento_id: departamento,
+    });
+    toast.success(`Cadastrado com sucesso!`);
+    setValidated(false);
   }
 
   const departamentosList = departamentos.map(dep => (
@@ -49,9 +74,13 @@ function NucleoEditar({ match }) {
     <>
       <Menu />
       <div className="container">
-        <h3>Editar Núcleo</h3>
+        <h3>{id ? 'Editar' : 'Novo'} Núcleo</h3>
 
-        <Form onSubmit={handleSubmit}>
+        <Form
+          onSubmit={id ? handleSubmitEditar : handleSubmitNovo}
+          noValidate
+          validated={validated}
+        >
           <>
             <Form.Row>
               <Form.Group as={Col}>
@@ -60,7 +89,8 @@ function NucleoEditar({ match }) {
                   type="text"
                   name="nome"
                   onChange={e => setNome(e.target.value)}
-                  defaultValue={nome}
+                  defaultValue={id && nome}
+                  required
                 />
               </Form.Group>
 
@@ -70,8 +100,9 @@ function NucleoEditar({ match }) {
                   as="select"
                   type="text"
                   name="depatamento"
-                  value={departamento}
                   onChange={e => setDepartamento(e.target.value)}
+                  required
+                  value={departamento}
                 >
                   {departamentosList}
                 </Form.Control>
@@ -84,19 +115,20 @@ function NucleoEditar({ match }) {
                 as="textarea"
                 rows="3"
                 name="atividades"
-                value={atividades}
+                value={id && atividades}
                 onChange={e => setAtividades(e.target.value)}
+                required
               />
             </Form.Group>
           </>
 
           <Button variant="primary" type="submit" size="sm">
-            Editar
+            {id ? 'Editar' : 'Novo'}
           </Button>
         </Form>
       </div>
     </>
   );
-}
+};
 
-export default NucleoEditar;
+export default Nucleo;

@@ -87,8 +87,8 @@ function EquipeNovo(props) {
                   as="select"
                   type="text"
                   name="departamento"
-                  defaultValue={departamento}
                   onChange={e => handleChangeDepartamento(e.target.value)}
+                  required
                 >
                   <option value="">Selecione uma opção</option>
                   {departamentosList}

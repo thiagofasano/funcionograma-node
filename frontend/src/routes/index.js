@@ -2,22 +2,18 @@ import React from 'react';
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
 
 import Main from '../Pages/Main';
-// import NoExist from '../Pages/NoExist';
 
 // Departamento
 import Departamento from '../Pages/Departamento';
-import DepartamentoEditar from '../Pages/Departamento/editar';
-import DepartamentoNovo from '../Pages/Departamento/novo';
+import DepartamentoNovoEditar from '../Pages/Departamento/departamento';
 
 // Nucleo
 import Nucleo from '../Pages/Nucleo';
-import NucleoEditar from '../Pages/Nucleo/editar';
-import NucleoNovo from '../Pages/Nucleo/novo';
+import NucleoNovoEditar from '../Pages/Nucleo/nucleo';
 
 // Equipe
 import Equipe from '../Pages/Equipe';
-import EquipeEditar from '../Pages/Equipe/editar';
-import EquipeNovo from '../Pages/Equipe/novo';
+import EquipeNovoEditar from '../Pages/Equipe/equipe';
 
 // Cargos
 import Cargo from '../Pages/Cargo';
@@ -38,14 +34,14 @@ export default function Routes() {
       <Switch>
         <Route path="/" exact component={Main} />
         <Route path="/departamentos/" exact component={Departamento} />
-        <Route path="/departamentos/novo" component={DepartamentoNovo} />
-        <Route path="/departamentos/:id" component={DepartamentoEditar} />
+        <Route path="/departamentos/novo" component={DepartamentoNovoEditar} />
+        <Route path="/departamentos/:id" component={DepartamentoNovoEditar} />
         <Route path="/nucleos/" exact component={Nucleo} />
-        <Route path="/nucleos/novo" exact component={NucleoNovo} />
-        <Route path="/nucleos/:id" component={NucleoEditar} />
+        <Route path="/nucleos/novo" exact component={NucleoNovoEditar} />
+        <Route path="/nucleos/:id" component={NucleoNovoEditar} />
         <Route path="/equipes/" exact component={Equipe} />
-        <Route path="/equipes/novo" component={EquipeNovo} />
-        <Route path="/equipes/:id" component={EquipeEditar} />
+        <Route path="/equipes/novo" component={EquipeNovoEditar} />
+        <Route path="/equipes/:id" component={EquipeNovoEditar} />
         <Route path="/cargos/" exact component={Cargo} />
         <Route path="/cargos/novo" exact component={CargoNovo} />
         <Route path="/cargos/:id" exact component={CargoEditar} />

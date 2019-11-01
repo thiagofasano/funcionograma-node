@@ -21,7 +21,7 @@ class Departamentos {
       }
     });
 
-    res.json([departamento]);
+    res.json(departamento);
   }
 
   async update(req, res) {

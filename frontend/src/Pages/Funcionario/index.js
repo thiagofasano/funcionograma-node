@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Table, Row, Col, Form, Button } from 'react-bootstrap';
-import { MdDelete, MdModeEdit } from 'react-icons/md';
+import { Row, Col, Form, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import api from '../../services/api';
 import confirmService from '../../Components/confirmService/Confirm';
 import Menu from '../../Components/Menu';
+import Tabela from '../../Components/Tabela';
 
 function Funcionario() {
   const [funcionarios, setFuncionarios] = useState([]);
@@ -105,65 +104,19 @@ function Funcionario() {
           </div>
         )}
 
-        <Table striped bordered>
-          <thead>
-            <tr>
-              <th>Foto</th>
-              <th>Nome</th>
-              <th>Departamento</th>
-              <th>Núcleo</th>
-              <th>Equipe</th>
-              <th>Cargo</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {funcionarios.map(funcionario => (
-              <tr key={funcionario.id}>
-                <td>
-                  {funcionario.image ? (
-                    <img
-                      src={`http://localhost:3333/files/${funcionario.image.path}`}
-                      alt=""
-                      width="61px"
-                      className="profile"
-                    />
-                  ) : (
-                    <img src="" alt="" width="61px" className="profile" />
-                  )}
-                </td>
-                <td>{funcionario.nome}</td>
-                <td>
-                  {funcionario.departamento
-                    ? funcionario.departamento.nome
-                    : ''}
-                </td>
-                <td>{funcionario.nucleo ? funcionario.nucleo.nome : ''}</td>
-                <td>{funcionario.equipe ? funcionario.equipe.nome : ''}</td>
-                <td>{funcionario.cargo ? funcionario.cargo.nome : ''}</td>
-                <td>
-                  <Link
-                    to={{
-                      pathname: `/funcionarios/${funcionario.id}`,
-                      data: funcionario,
-                    }}
-                  >
-                    <MdModeEdit size="16px" id={funcionario.id} />
-                  </Link>
-
-                  <Link to="#" size="sm">
-                    <MdDelete
-                      onClick={() =>
-                        handleDelete(funcionario.id, funcionario.nome)
-                      }
-                      size="16px"
-                    />
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+        <Tabela
+          data={funcionarios}
+          onDelete={handleDelete}
+          body={['Foto', 'Nome', 'Departamento', 'Nucleo', 'Equipe', 'Cargo']}
+          headingNames={[
+            'Foto',
+            'Nome',
+            'Departamento',
+            'Núcleo',
+            'Equipe',
+            'Cargo',
+          ]}
+        />
 
         <p>{notFound}</p>
 

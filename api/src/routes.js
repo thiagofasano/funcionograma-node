@@ -43,7 +43,11 @@ routes.post(
 );
 routes.get("/funcionarios", FuncionarioController.index);
 routes.get("/funcionarios/:id", FuncionarioController.show);
-routes.put("/funcionarios/:id", FuncionarioController.update);
+routes.put(
+  "/funcionarios/:id",
+  upload.single("image"),
+  FuncionarioController.update
+);
 routes.delete("/funcionarios/:id", FuncionarioController.delete);
 
 // Files

@@ -50,9 +50,16 @@ export default createGlobalStyle`
 
     .profile {
         float: left;
-        border-radius: 3px;
+        border-radius: 50%;
         margin-bottom: 10px;
-        padding-right: 10px;
+        height: 140px;
+    }
+
+    .profile-grid {
+        float: left;
+        border-radius: 50%;
+        margin-bottom: 10px;
+        height: 45px;
     }
 
     .cargos tr:hover {

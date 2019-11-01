@@ -1,38 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { Form, Button, Col } from 'react-bootstrap';
+import { Form, Col, Button } from 'react-bootstrap';
 import api from '../../services/api';
 import Menu from '../../Components/Menu';
 
-function EquipeDetail({ match }) {
+// import { Container } from './styles';
+
+const Equipe = ({ match }) => {
   const [nome, setNome] = useState('');
   const [atividades, setAtividades] = useState('');
   const [nucleo, setNucleo] = useState('');
   const [nucleos, setNucleos] = useState([]);
-  const [departamento, setDepartamento] = useState([]);
+  const [departamento, setDepartamento] = useState();
   const [departamentos, setDepartamentos] = useState([]);
 
   const { id } = match.params;
 
   useEffect(() => {
     async function loadEquipe() {
-      const responseEquipe = await api.get(`/equipes/${id}`);
-      setAtividades(responseEquipe.data.atividades);
-      setNome(responseEquipe.data.nome);
-      setNucleo(responseEquipe.data.nucleo_id);
-      setDepartamento(responseEquipe.data.nucleo.departamento_id);
-
-      const responseNucleos = await api.get(
-        `/nucleos/?departamento=${responseEquipe.data.nucleo.departamento_id}`
-      );
-      setNucleos(responseNucleos.data);
-
-      const responseDepartamentos = await api.get(`/departamentos`);
-      setDepartamentos(responseDepartamentos.data);
+      const response = await api.get(`/equipes/${id}`);
+      setAtividades(response.data.atividades);
+      setNome(response.data.nome);
+      setNucleo(response.data.nucleo_id);
+      setDepartamento(response.data.nucleo.departamento_id);
     }
 
-    loadEquipe();
-  }, [id]);
+    async function loadDepartamentos() {
+      const response = await api.get(`/departamentos`);
+      setDepartamentos(response.data);
+    }
+
+    async function loadNucleos() {
+      const response = await api.get(`/nucleos/?departamento=${departamento}`);
+      setNucleos(response.data);
+    }
+
+    id && loadEquipe();
+    loadDepartamentos();
+    loadNucleos();
+  }, [departamento]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -57,11 +63,11 @@ function EquipeDetail({ match }) {
     </option>
   ));
 
-  const departamentosListFilter = departamentos.filter(dep => {
-    return dep.id === departamento;
-  });
+  //   const departamentosListFilter = departamentos.filter(dep => {
+  //     return dep.id === departamento;
+  //   });
 
-  const departamentosList = departamentosListFilter.map(dep => (
+  const departamentosList = departamentos.map(dep => (
     <option key={dep.id} value={dep.id}>
       {dep.nome}
     </option>
@@ -92,6 +98,7 @@ function EquipeDetail({ match }) {
                   as="select"
                   type="text"
                   name="departamento"
+                  value={id && departamento}
                   onChange={e => handleChangeDepartamento(e.target.value)}
                 >
                   {departamentosList}
@@ -131,6 +138,6 @@ function EquipeDetail({ match }) {
       </div>
     </>
   );
-}
+};
 
-export default EquipeDetail;
+export default Equipe;

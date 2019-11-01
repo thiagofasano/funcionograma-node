@@ -23,6 +23,11 @@ class Funcionarios {
       offset: (page - 1) * 20,
       include: [
         {
+          model: File,
+          as: "image",
+          attributes: ["id", "path"]
+        },
+        {
           model: Departamento,
           as: "departamento",
           where: condition
@@ -41,11 +46,6 @@ class Funcionarios {
           model: Cargo,
           as: "cargo",
           attributes: ["id", "nome", "ordem"]
-        },
-        {
-          model: File,
-          as: "image",
-          attributes: ["id", "path"]
         }
       ],
       order: [["nome", "ASC"]]
@@ -97,8 +97,6 @@ class Funcionarios {
     const [name] = image.split(".");
     const fileName = `${name}.jpg`;
 
-    console.log(nome, departamento_id, nucleo_id, equipe_id, cargo_id, image);
-
     await sharp(req.file.path)
       .resize(150)
       .jpeg({ quality: 70 })
@@ -140,25 +138,71 @@ class Funcionarios {
   }
 
   async update(req, res) {
-    const { id } = req.params;
-    const { nome, departamento, nucleo, equipe, cargo } = req.body;
+    const { nome, departamento_id, nucleo_id, equipe_id, cargo_id } = req.body;
 
-    const funcionario = await Funcionario.update(
-      {
+    if (req.file) {
+      const { filename: image } = req.file;
+
+      const [name] = image.split(".");
+      const fileName = `${name}.jpg`;
+
+      await sharp(req.file.path)
+        .resize(150)
+        .jpeg({ quality: 70 })
+        .toFile(path.resolve(req.file.destination, "resized", fileName));
+
+      fs.unlinkSync(req.file.path);
+
+      const foto = await File.create({
         nome,
-        departamento_id: departamento,
-        nucleo_id: nucleo,
-        equipe_id: equipe,
-        cargo_id: cargo
-      },
-      {
-        where: {
-          id
-        }
-      }
-    );
+        path: fileName
+      });
 
-    res.json(funcionario);
+      const file_id = foto.id;
+
+      try {
+        const funcionario = await Funcionario.update(
+          {
+            nome,
+            file_id,
+            cargo_id,
+            departamento_id,
+            nucleo_id,
+            equipe_id
+          },
+          {
+            where: {
+              id: req.params.id
+            }
+          }
+        );
+
+        return res.json(funcionario);
+      } catch (err) {
+        return console.log(err);
+      }
+    } else {
+      try {
+        const funcionario = await Funcionario.update(
+          {
+            nome,
+            cargo_id,
+            departamento_id,
+            nucleo_id,
+            equipe_id
+          },
+          {
+            where: {
+              id: req.params.id
+            }
+          }
+        );
+
+        return res.json(funcionario);
+      } catch (err) {
+        return console.log(err);
+      }
+    }
   }
 }
 
