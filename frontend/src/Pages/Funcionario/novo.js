@@ -5,6 +5,8 @@ import api from '../../services/api';
 import Menu from '../../Components/Menu';
 
 function FuncionarioNovo() {
+  const [validated, setValidated] = useState(false);
+
   const [departamentos, setDepartamentos] = useState([]);
   const [departamento, setDepartamento] = useState(null);
   const [nucleos, setNucleos] = useState([]);
@@ -15,7 +17,6 @@ function FuncionarioNovo() {
   const [cargo, setCargo] = useState(null);
   const [nome, setNome] = useState(null);
   const [image, setImage] = useState(null);
-  // const [email, setEmail] = useState('');
 
   useEffect(() => {
     async function loadOpcoes() {
@@ -57,19 +58,34 @@ function FuncionarioNovo() {
   }
 
   async function handleSubmit(e) {
-    e.preventDefault();
+    const form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      e.preventDefault();
+      setValidated(true);
+    } else {
+      e.preventDefault();
 
-    const data = new FormData();
+      const data = new FormData();
 
-    data.append('nome', nome);
-    data.append('image', image);
-    data.append('cargo_id', cargo);
-    data.append('departamento_id', departamento);
-    data.append('nucleo_id', nucleo);
-    data.append('equipe_id', equipe);
+      data.append('nome', nome);
+      data.append('image', image);
+      data.append('cargo_id', cargo);
+      data.append('departamento_id', departamento);
+      data.append('nucleo_id', nucleo);
+      data.append('equipe_id', equipe);
 
-    await api.post(`/funcionarios/`, data);
-    return toast.success(`Criado com sucesso!`);
+      await api.post(`/funcionarios/`, data);
+
+      setNome('');
+      setImage('');
+      setDepartamento('');
+      setNucleo('');
+      setEquipe('');
+      setCargo('');
+      setValidated(false);
+
+      toast.success(`Criado com sucesso!`);
+    }
   }
 
   const departamentosList = departamentos.map(dep => (
@@ -93,7 +109,8 @@ function FuncionarioNovo() {
       <Menu />
       <div className="container">
         <h3>Novo Funcionário</h3>
-        <Form onSubmit={handleSubmit}>
+
+        <Form onSubmit={handleSubmit} noValidate validated={validated}>
           <Form.Row>
             <Form.Group as={Col} xs={12} md={12}>
               <Form.Label>Foto</Form.Label>
@@ -109,7 +126,9 @@ function FuncionarioNovo() {
               <Form.Control
                 type="text"
                 name="nome"
+                value={nome}
                 onChange={e => setNome(e.target.value)}
+                required
               />
               <br />
 
@@ -121,20 +140,22 @@ function FuncionarioNovo() {
                 name="departamento"
                 value={departamento}
                 onChange={e => handleSelectDepartamento(e.target.value)}
+                required
               >
-                <option value="0">Selecione uma opção</option>
+                <option value="">Selecione uma opção</option>
                 {departamentosList}
               </Form.Control>
               <br />
-              <Form.Label>Nucleo</Form.Label>
+              <Form.Label>Núcleo</Form.Label>
               <Form.Control
                 as="select"
                 type="text"
                 name="nucleo"
                 value={nucleo}
                 onChange={e => handleSelectNucleo(e.target.value)}
+                required
               >
-                <option value="0">Selecione uma opção</option>
+                <option value="">Selecione uma opção</option>
                 {nucleosList}
               </Form.Control>
               <br />
@@ -143,9 +164,10 @@ function FuncionarioNovo() {
                 as="select"
                 type="text"
                 name="equipe"
+                value={equipe}
                 onChange={e => setEquipe(e.target.value)}
               >
-                <option value="0">Selecione uma opção</option>
+                <option value="">Selecione uma opção</option>
                 {equipesList}
               </Form.Control>
               <br />
@@ -154,9 +176,11 @@ function FuncionarioNovo() {
                 as="select"
                 type="text"
                 name="cargo"
+                value={cargo}
                 onChange={e => setCargo(e.target.value)}
+                required
               >
-                <option value="0">Selecione uma opção</option>
+                <option value="">Selecione uma opção</option>
                 {cargosList}
               </Form.Control>
               <br />

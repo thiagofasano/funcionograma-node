@@ -5,6 +5,8 @@ import api from '../../services/api';
 import Menu from '../../Components/Menu';
 
 function FuncionarioEditar({ match }) {
+  const [validated, setValidated] = useState(false);
+
   // Listas
   const [funcionarios, setFuncionarios] = useState([]);
   const [departamentos, setDepartamentos] = useState([]);
@@ -14,7 +16,8 @@ function FuncionarioEditar({ match }) {
 
   // Informações de cadastro
   const [nome, setNome] = useState('');
-  // const [foto, setFoto] = useState('');
+  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [cargo, setCargo] = useState('');
   const [departamento, setDepartamento] = useState('');
   const [nucleo, setNucleo] = useState('');
@@ -51,7 +54,7 @@ function FuncionarioEditar({ match }) {
     }
 
     loadFuncionario();
-  }, []);
+  }, [id]);
 
   async function handleSelectDepartamento(e) {
     const response = await api.get(`/nucleos/?departamento=${e}`);
@@ -69,45 +72,68 @@ function FuncionarioEditar({ match }) {
     }
   }
 
+  // function handleImage(e) {
+  //   setImage(e.target.files[0]);
+  //   setImagePreview(URL.createObjectURL(e.target.files[0]));
+  // }
+
   async function handleSelectNucleo(e) {
     const response = await api.get(`/equipes/?nucleo=${e}`);
     setEquipes(response.data);
     setNucleo(e);
 
-    if (equipes.length === 0) {
+    if (response.data.length <= 0) {
       setEquipe(null);
     }
   }
 
   async function handleSubmit(e) {
-    e.preventDefault();
-    await api.put(`/funcionarios/${id}`, {
-      nome,
-      // foto,
-      cargo,
-      departamento,
-      nucleo,
-      equipe,
-    });
+    const form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      e.preventDefault();
+      setValidated(true);
+    } else {
+      e.preventDefault();
 
-    console.log(nome, cargo, departamento, nucleo, equipe);
-    return toast.success(`Atualizado com sucesso!`);
+      const data = new FormData();
+
+      data.append('nome', nome);
+
+      data.append('image', image);
+
+      data.append('cargo_id', cargo);
+      data.append('departamento_id', departamento);
+      data.append('nucleo_id', nucleo);
+      data.append('equipe_id', equipe);
+
+      await api.put(`/funcionarios/${id}`, data);
+
+      toast.success(`Atualizado com sucesso!`);
+    }
   }
 
   const departamentosList = departamentos.map(dep => (
-    <option value={dep.id}>{dep.nome}</option>
+    <option key={dep.id} value={dep.id}>
+      {dep.nome}
+    </option>
   ));
 
   const nucleosList = nucleos.map(nu => (
-    <option value={nu.id}>{nu.nome}</option>
+    <option key={nu.id} value={nu.id}>
+      {nu.nome}
+    </option>
   ));
 
   const equipesList = equipes.map(eq => (
-    <option value={eq.id}>{eq.nome}</option>
+    <option key={eq.id} value={eq.id}>
+      {eq.nome}
+    </option>
   ));
 
   const cargosList = cargos.map(car => (
-    <option value={car.id}>{car.nome}</option>
+    <option key={car.id} value={car.id}>
+      {car.nome}
+    </option>
   ));
 
   return (
@@ -116,28 +142,50 @@ function FuncionarioEditar({ match }) {
       <div className="container">
         <h3>Editar Funcionário</h3>
         {funcionarios.map(funcionario => (
-          <Form onSubmit={handleSubmit}>
+          <Form
+            key={funcionario.id}
+            onSubmit={handleSubmit}
+            noValidate
+            validated={validated}
+          >
             <Form.Row>
               <Form.Group as={Col}>
-                {funcionario.image ? (
+                {imagePreview ? (
+                  <img
+                    src={imagePreview}
+                    alt=""
+                    width="150px"
+                    className="profile"
+                  />
+                ) : (
                   <img
                     src={`http://localhost:3333/files/${funcionario.image.path}`}
                     alt=""
                     width="150px"
                     className="profile"
                   />
-                ) : (
-                  <img src="" alt="" width="61px" className="profile" />
                 )}
               </Form.Group>
 
               <Form.Group as={Col} xs={12} md={9}>
+                <Form.Label>Foto</Form.Label>
+                <Form.Control
+                  type="file"
+                  name="foto"
+                  onChange={e => {
+                    setImage(e.target.files[0]);
+                    setImagePreview(URL.createObjectURL(e.target.files[0]));
+                  }}
+                />
+
+                <br />
                 <Form.Label>Nome</Form.Label>
                 <Form.Control
                   type="text"
                   name="nome"
                   defaultValue={funcionario.nome}
                   onChange={e => setNome(e.target.value)}
+                  required
                 />
                 <br />
                 <Form.Label>Departamento</Form.Label>
@@ -148,8 +196,9 @@ function FuncionarioEditar({ match }) {
                   name="departamento"
                   value={departamento}
                   onChange={e => handleSelectDepartamento(e.target.value)}
+                  required
                 >
-                  <option value="0">Selecione uma opção</option>
+                  <option value="">Selecione uma opção</option>
                   {departamentosList}
                 </Form.Control>
                 <br />
@@ -160,8 +209,9 @@ function FuncionarioEditar({ match }) {
                   name="nucleo"
                   value={nucleo}
                   onChange={e => handleSelectNucleo(e.target.value)}
+                  required
                 >
-                  <option value="0">Selecione uma opção</option>
+                  <option value="">Selecione uma opção</option>
                   {nucleosList}
                 </Form.Control>
                 <br />
@@ -174,7 +224,7 @@ function FuncionarioEditar({ match }) {
                   onChange={e => setEquipe(e.target.value)}
                 >
                   {}
-                  <option value="0">Selecione uma opção</option>
+                  <option value="">Selecione uma opção</option>
                   {equipesList}
                 </Form.Control>
                 <br />
@@ -185,8 +235,9 @@ function FuncionarioEditar({ match }) {
                   name="cargo"
                   value={cargo}
                   onChange={e => setCargo(e.target.value)}
+                  required
                 >
-                  <option value="0">Selecione uma opção</option>
+                  <option value="">Selecione uma opção</option>
                   {cargosList}
                 </Form.Control>
                 <br />

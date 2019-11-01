@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { Form, Table, Row, Col, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { MdDelete, MdModeEdit } from 'react-icons/md';
+import { Form, Row, Col, Button } from 'react-bootstrap';
 import api from '../../services/api';
 import confirmService from '../../Components/confirmService/Confirm';
 import Menu from '../../Components/Menu';
+import Tabela from '../../Components/Tabela';
 
 function Equipe() {
   const [equipes, setEquipes] = useState([]);
   const [nucleos, setNucleos] = useState([]);
-  const [departamento, setDepartamento] = useState([]);
+  const [departamentos, setDepartamentos] = useState([]);
   const [notFound, setNotFound] = useState('');
 
   useEffect(() => {
     async function loadDepartamento(e) {
       const response = await api.get(`/departamentos`);
-      setDepartamento(response.data);
+      setDepartamentos(response.data);
     }
 
     loadDepartamento();
@@ -37,7 +36,13 @@ function Equipe() {
 
   async function handleSelectDepartamento(e) {
     const response = await api.get(`/nucleos/?departamento=${e.target.value}`);
-    setNucleos(response.data);
+
+    if (response.data.length === 0) {
+      setEquipes([]);
+      setNucleos([]);
+    } else {
+      setNucleos(response.data);
+    }
   }
 
   async function handleSelectNucleo(e) {
@@ -50,7 +55,7 @@ function Equipe() {
     }
   }
 
-  const departamentoList = departamento.map(dep => (
+  const departamentoList = departamentos.map(dep => (
     <option value={dep.id} key={dep.id}>
       {dep.nome}
     </option>
@@ -79,7 +84,7 @@ function Equipe() {
               name="departamento"
               onChange={e => handleSelectDepartamento(e)}
             >
-              <option value="selecione">Selecione</option>
+              <option value="0">Selecione</option>
               {departamentoList}
             </Form.Control>
           </Col>
@@ -102,39 +107,13 @@ function Equipe() {
           </Col>
         </Form.Group>
 
-        <Table striped bordered>
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Atividades</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {equipes.map(equipe => (
-              <tr key={equipe.id}>
-                <td>{equipe.nome}</td>
-                <td>{equipe.atividades}</td>
-                <td>
-                  <Link
-                    to={{
-                      pathname: `/equipes/${equipe.id}`,
-                      data: equipe,
-                    }}
-                  >
-                    <MdModeEdit size="16px" id={equipe.id} />
-                  </Link>
-                  <Link to="#" size="sm">
-                    <MdDelete
-                      onClick={() => handleDelete(equipe.id, equipe.nome)}
-                      size="16px"
-                    />
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+        <Tabela
+          data={equipes}
+          onDelete={handleDelete}
+          headingNames={['Nome', 'Atividades']}
+          body={['Nome', 'Atividades']}
+        />
+
         <p>{notFound}</p>
         <Button href="novo" variant="success" size="sm">
           Novo

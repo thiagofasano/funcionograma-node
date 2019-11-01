@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Table, Button, Row, Col, Form } from 'react-bootstrap';
-import { MdDelete, MdModeEdit } from 'react-icons/md';
+import { Button, Row, Col, Form } from 'react-bootstrap';
 import api from '../../services/api';
 import confirmService from '../../Components/confirmService/Confirm';
 import Menu from '../../Components/Menu';
+import Tabela from '../../Components/Tabela';
 
 function Nucleos() {
   const [nucleos, setNucleos] = useState([]);
@@ -36,6 +35,7 @@ function Nucleos() {
 
   async function handleSelectDepartamento(e) {
     const response = await api.get(`/nucleos/?departamento=${e.target.value}`);
+
     setNucleos(response.data);
 
     if (response.data.length === 0) {
@@ -74,35 +74,13 @@ function Nucleos() {
           </Col>
         </Form.Group>
 
-        <Table striped bordered>
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Atividades</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {nucleos.map(nucleo => (
-              <tr key={nucleo.id}>
-                <td>{nucleo.nome}</td>
-                <td>{nucleo.atividades}</td>
-                <td>
-                  <Link to={`/nucleos/${nucleo.id}`} size="sm">
-                    <MdModeEdit size="16px" id={nucleo.id} />
-                  </Link>
+        <Tabela
+          data={nucleos}
+          onDelete={handleDelete}
+          headingNames={['Nome', 'Atividades']}
+          body={['Nome', 'Atividades']}
+        />
 
-                  <Link to="#" size="sm">
-                    <MdDelete
-                      onClick={() => handleDelete(nucleo.id, nucleo.nome)}
-                      size="16px"
-                    />
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
         <p>{notFound}</p>
         <Button href="novo" variant="success" size="sm">
           Novo

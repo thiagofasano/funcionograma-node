@@ -29,16 +29,6 @@ class Equipes {
   }
 
   async store(req, res) {
-    // const existNucleo = await Nucleo.findOne({
-    //   where: {
-    //     id: req.body.nucleo_id
-    //   }
-    // });
-
-    // if (!existNucleo) {
-    //   return res.json(`Nucleo não existe`);
-    // }
-
     const equipe = await Equipe.create(req.body);
     return res.json(equipe);
   }
